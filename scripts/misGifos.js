@@ -1,10 +1,7 @@
-
 let misGifos_render = document.getElementById('misGifos_render');
 let misGifos_empty = document.getElementById('misGifos_empty');
-
 let misGifos_render_container = document.getElementById('misGifos_render_container');
-//limpiar la seccion de Mis Gifos
-
+//Renderizado de misGifos
 function creaMisGifos (){
     if(localStorage.getItem('misGifos') == null){
         misGifos_empty.hidden=false;
@@ -13,7 +10,7 @@ function creaMisGifos (){
     else{
         misGifos_empty.hidden=true;
         
-        fetch(`https://api.giphy.com/v1/gifs?api_key=IkuYt6UrCtsIzd7Oj3xL7o32GrO1B6Ud&ids=${localStorage.getItem('misGifos')}`).then((objetoMisGifos)=>{
+        fetch(`https://api.giphy.com/v1/gifs?api_key=plH7eWLvsgU85fXPr4heFPxavMqiZOZG&ids=${localStorage.getItem('misGifos')}`).then((objetoMisGifos)=>{
         objetoMisGifos.json()
         .then((dataInfo)=>{
             console.log("data",dataInfo.data);
@@ -47,11 +44,9 @@ function createMisGifos(information){
     imgDownloadGifos.src = "./assets/icon-download.svg";
     imgDownloadGifos.setAttribute("data-image", getUrlImage(information));
     imgDownloadGifos.setAttribute("data-title", getTitle(information));
-    // imgDownloadGifos.setAttribute("onclick", "descargarGif('"+imgDownloadGifos.dataset.image+ +imgDownloadGifos.dataset.title+"')");
     imgDownloadGifos.addEventListener('click', ()=> descargarGif(imgDownloadGifos.dataset.image , imgDownloadGifos.dataset.title));
     let imgMaxGifos = document.createElement("img");
     imgMaxGifos.src = "./assets/icon-max.svg";
-    /* imgMaxGifos.setAttribute("data-search", searchGif(information)); */
     imgMaxGifos.setAttribute("data-id", getId(information));
     imgMaxGifos.setAttribute("onclick", "searchGif('"+imgMaxGifos.dataset.id+"')");
     let divTextGifos = document.createElement("div");
@@ -76,4 +71,3 @@ function createMisGifos(information){
 }
 
 
-//`https://media.giphy.com/media/${}/source.gif` //link para solo mostrar la imagen del gif

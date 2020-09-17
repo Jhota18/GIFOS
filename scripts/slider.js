@@ -65,13 +65,6 @@ let createTrending = (gifs) => {
     h2.classList.add('overlayH2');
     h2.textContent= getTitle(gifs);
 
-
-
-
-
-
-
-
     div.appendChild(a);
     a.appendChild(picture);
     picture.appendChild(img);

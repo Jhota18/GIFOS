@@ -1,4 +1,4 @@
-/* Cambio de icono del menu */
+//Cambio de icono del menu
 document.getElementById('btn-menu').addEventListener('click', () => {
         let iconb = document.getElementById('bars');
         let iconc = document.getElementById('close');
@@ -18,7 +18,7 @@ document.getElementById('btn-menu').addEventListener('click', () => {
 
 
 
-/* Dark style */
+// Dark style
 window.onload = () => {
         new DarkMode();
 }

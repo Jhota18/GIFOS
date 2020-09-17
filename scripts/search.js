@@ -1,4 +1,4 @@
-const Key_api = 'plH7eWLvsgU85fXPr4heFPxavMqiZOZG';
+const Key_api = "plH7eWLvsgU85fXPr4heFPxavMqiZOZG";
 const limit = 12;
 
 async function getGifByTitle(title) {
@@ -11,13 +11,17 @@ async function getGifByTitle(title) {
 let input = document.getElementById('gifTitle');
 let results = document.getElementById('results');
 let btnSearch = document.getElementById('search');
+let closeSearch = document.getElementById('closeSearch');
 
 //busqueda con el clic en el icono
 btnSearch.addEventListener('click',()=>{
         search();
 });
 
-
+closeSearch.addEventListener("click", (e)=>{
+    if(e.target.src.includes('close.svg'))
+        input.value="";
+    });
 
 let search = () => {
     let gifTitle = input.value;
@@ -25,6 +29,10 @@ let search = () => {
     document.querySelector('.search-title').innerHTML= input.value;
     document.querySelector('#results').innerHTML='';
     if(gifTitle === ''){
+        if(closeSearch.src.includes('close.svg')){
+            clearBtnSearch();
+            return;
+        }
         alert('Ingrese el nombre de un GIF para buscar');
     } else{
 
@@ -36,11 +44,12 @@ let search = () => {
             gifData.data.forEach(gif => {
                 createHtml(gif);
                 allGifs.push(new Gif (gif.images.downsized.url, gif.images.preview_gif.url, gif.id, gif.title, gif.username));
-
             });            
         });
-    }
 
+        
+    }
+    
 }
 
 // FUNCION DE AGREGAR BOTÓN
@@ -166,28 +175,42 @@ let createHtml = (information) =>{
 // LLAMADO A LA API SUGERENCIAS DE BUSQUEDA
 let search_input_enter = document.getElementById('gifTitle');
 search_input_enter.addEventListener("keyup",(event)=>{
-    
+    clearBtnSearch();
+});
+let clearBtnSearch =()=>{
+    if(input.value==""){
+        closeSearch.setAttribute('src', './assets/icon-search.svg');
+    }
     if (event.keyCode === 13){
         document.querySelector('.search-title').innerHTML= input.value;    
         search();
         return;
     } 
-    if(search_input_enter.value == '') {
+    else if(search_input_enter.value == '') {
         document.querySelector('.suggestions').innerHTML = '';
-        suggestion_container.style.display =''
-    }else{
+        suggestion_container.style.display ='';
+ 
+    }
+    else{
         suggest();
     }
-});
-
-
+}
 let suggestion_container = document.querySelector('.suggestion-container');
 let suggest = ()=>{
     let term = input.value;
+
+    /* changeIconSearch(); */
     
     if(term != ''){
+        console.log('estoy en el primer if');
         suggestion_container.style.display = 'block';
-    }
+        closeSearch.setAttribute('src', './assets/close.svg');
+        closeSearch.style.padding = '3px';
+
+    } 
+    
+    
+    
     
     
     fetch(`https://api.giphy.com/v1/tags/related/${term}?api_key=plH7eWLvsgU85fXPr4heFPxavMqiZOZG&limit=4`)
@@ -222,7 +245,7 @@ let getsearch = ()=>{
             
         });            
     });
-    suggestion_container.style.display = ''; // limpia la sugerencia
+    suggestion_container.style.display = '';
 }
 
 
@@ -235,9 +258,6 @@ let createSuggestions = (data) => {
     li.setAttribute('onclick', "getsearch()");
     li.textContent = data;
 
-
-
- 
     li.insertAdjacentElement('afterbegin', imgIcon);
     let ul = document.querySelector('.suggestions');
     ul.insertAdjacentElement('beforeend', li);

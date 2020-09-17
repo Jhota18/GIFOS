@@ -1,4 +1,3 @@
-
 //ACCEDIENDO A LOS ELEMENTOS
 let window_video = document.getElementById('window_video');
 let btn_video = document.getElementById('btn_start');
@@ -9,6 +8,8 @@ let is_recording = false;
 let recorder;
 let btn_repeat = document.getElementById('btn_repeat');
 let temporizador = document.getElementById('temporizador');
+let btnDowloadGif = document.getElementById('btnDowloadGif');
+let linkMyGif = document.getElementById('linkMyGif');
 //MARCADORES PASO A PASO 
 let btn_1 = document.getElementById('btn_1');
 let btn_2 = document.getElementById('btn_2');
@@ -57,7 +58,6 @@ btn_video.addEventListener('click', ()=>{
             btn_3.classList.add('morado');
             num3.classList.add('blanco');
             uploadGifo();
-
             break;
     }
 });
@@ -70,7 +70,7 @@ btn_repeat.addEventListener('click',()=>{
     btn_repeat.classList.add('hide');
 });
 // INICIO CAMARA 
-const startdivice = ()=>{ //btn comenzar
+const startdivice = ()=>{
     navigator.mediaDevices.getUserMedia({video: true, audio: false}).then((stream)=>{
         window_video.srcObject = stream;
         window_video.play();
@@ -94,7 +94,7 @@ const startrecord = ()=>{
         frameRate: 1,
         quality: 10,
         width: 360,
-        height: 240, 
+        height: 240,
     });
     recorder.startRecording();
     is_recording = true;
@@ -122,7 +122,7 @@ const stopDivice = ()=>{
 let uploadGifo = () =>{
     btn_video.hidden=true;
     var form = new FormData();
-    form.append('api_key','IkuYt6UrCtsIzd7Oj3xL7o32GrO1B6Ud');
+    form.append('api_key','plH7eWLvsgU85fXPr4heFPxavMqiZOZG');
     form.append('file',recorder.getBlob(),'misGifos.gif');
     fetch('https://upload.giphy.com/v1/gifs', {
         method: "POST",
@@ -132,12 +132,25 @@ let uploadGifo = () =>{
             btn_video.textContent = 'COMENZAR';
             let misGifos = localStorage.getItem('misGifos') == null?[]:localStorage.getItem('misGifos').split(',');
             misGifos.push(data.data.id);
+            console.log(misGifos);
             localStorage.setItem('misGifos',misGifos);
             uploading_img.classList.add('hide');
             upload_img.classList.remove('hide');
+            localStorage.setItem('resentUp',data.data.id);
         });
     });
 }
+
+btnDowloadGif.addEventListener('click', () => {
+    descargarGif(URL.createObjectURL(recorder.getBlob()),'nuevoGif.gif');
+});
+
+linkMyGif.addEventListener('click',()=>{
+    var link = document.createElement('a');
+    link.target='blank';
+    link.href=`https://giphy.com/gifs/${localStorage.getItem('resentUp')}`;
+    link.click();
+});
 
 function add() {
     seconds++;
